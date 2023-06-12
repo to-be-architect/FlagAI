@@ -6,7 +6,7 @@ from flagai.model.predictor.aquila import aquila_generate
 from flagai.data.tokenizer import Tokenizer
 import bminf
 
-state_dict = "./checkpoints_in"
+state_dict = "/home/me/ai/FlagAI/examples/Aquila/Aquila-chat/data/"
 model_name = 'aquilachat-7b'
 
 loader = AutoLoader(
@@ -33,19 +33,20 @@ texts = [
         "东三省和海南岛的区别？",
         ]
 
-for text in texts:
-    print('-'*80)
-    print(f"text is {text}")
+if __name__ == '__main__':
+    for text in texts:
+        print('-'*80)
+        print(f"text is {text}")
 
-    from cyg_conversation import default_conversation
+        from cyg_conversation import default_conversation
 
-    conv = default_conversation.copy()
-    conv.append_message(conv.roles[0], text)
-    conv.append_message(conv.roles[1], None)
+        conv = default_conversation.copy()
+        conv.append_message(conv.roles[0], text)
+        conv.append_message(conv.roles[1], None)
 
-    tokens = tokenizer.encode_plus(f"{conv.get_prompt()}", None, max_length=None)['input_ids']
-    tokens = tokens[1:-1]
+        tokens = tokenizer.encode_plus(f"{conv.get_prompt()}", None, max_length=None)['input_ids']
+        tokens = tokens[1:-1]
 
-    with torch.no_grad():
-        out = aquila_generate(tokenizer, model, [text], max_gen_len:=200, top_p=0.95, prompts_tokens=[tokens])
-        print(f"pred is {out}")
+        with torch.no_grad():
+            out = aquila_generate(tokenizer, model, [text], max_gen_len:=200, top_p=0.95, prompts_tokens=[tokens])
+            print(f"pred is {out}")

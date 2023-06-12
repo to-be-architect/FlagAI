@@ -24,8 +24,9 @@ test_data = [
     "雅虎发布2014年第四季度财报并推出了免税方式剥离其持有的阿里巴巴集团15％股权的计划打算将这一价值约400亿美元的宝贵投资分配给股东截止发稿前雅虎股价上涨了大约7％至5145美元"
 ]
 
-for text in test_data:
-    print(
-        predictor.predict_generate_beamsearch(text,
-                                              out_max_length=50,
-                                              beam_size=3))
+if __name__ == '__main__':
+    for text in test_data:
+        print(
+            predictor.predict_generate_beamsearch(text,
+                                                  out_max_length=50,
+                                                  beam_size=3))

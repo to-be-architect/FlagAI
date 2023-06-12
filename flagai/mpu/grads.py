@@ -20,7 +20,8 @@
 # repo: https://github.com/pytorch/pytorch
 
 import torch
-from torch._six import inf
+# from torch._six import inf
+from torch import inf
 
 from .initialize import get_model_parallel_group
 from .initialize import get_model_parallel_rank
