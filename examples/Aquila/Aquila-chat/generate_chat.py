@@ -45,16 +45,16 @@ async def create_item(request: Request):
     conv.append_message(conv.roles[0], prompt)
     conv.append_message(conv.roles[1], None)
 
-    tokens = tokenizer.encode_plus(f"{conv.get_prompt()}", None, max_length=4096)['input_ids']
+    tokens = tokenizer.encode_plus(f"{conv.get_prompt()}", None, max_length=1024)['input_ids']
     tokens = tokens[1:-1]
 
     with torch.no_grad():
         out = aquila_generate(tokenizer,
                               model,
                               [prompt],
-                              max_gen_len=8192,
+                              max_gen_len=2048,
                               temperature=0.8,
-                              top_p=0.7,
+                              top_p=0.95,
                               prompts_tokens=[tokens])
 
         now = datetime.datetime.now()

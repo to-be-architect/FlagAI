@@ -25,7 +25,7 @@ def aquila_generate(
         min_prompt_size = min([len(t) for t in prompt_tokens])
         max_prompt_size = max([len(t) for t in prompt_tokens])
 
-        total_len = min(8192, max_gen_len + max_prompt_size)
+        total_len = min(2048, max_gen_len + max_prompt_size)
 
         tokens = torch.full((bsz, total_len), 0).cuda().long()
         for k, t in enumerate(prompt_tokens):
@@ -60,6 +60,9 @@ def aquila_generate(
             # except ValueError:
             #     pass
             decoded.append(tokenizer.decode(t))
+
+        print(decoded)
+
         return decoded[0]
 
 
