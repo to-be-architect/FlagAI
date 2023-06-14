@@ -15,6 +15,21 @@ model_name = 'aquilachat-7b'
 
 device = torch.device('cuda', 0)
 
+loader = AutoLoader("lm",
+                    model_dir=state_dict,
+                    model_name=model_name,
+                    use_cache=True)
+
+model = loader.get_model()
+tokenizer = loader.get_tokenizer()
+
+cache_dir = os.path.join(state_dict, model_name)
+
+model.eval()
+model.half()
+model.cuda(device=device)
+
+predictor = Predictor(model, tokenizer)
 
 def torch_gc():
     if torch.cuda.is_available():
@@ -57,6 +72,8 @@ async def create_item(request: Request):
                               top_p=0.95,
                               prompts_tokens=[tokens])
 
+        out = out.split("###Assistant:")[-1].replace("[UNK]", "")
+
         now = datetime.datetime.now()
         time = now.strftime("%Y-%m-%d %H:%M:%S")
         answer = {
@@ -71,20 +88,4 @@ async def create_item(request: Request):
 
 
 if __name__ == '__main__':
-    loader = AutoLoader("lm",
-                        model_dir=state_dict,
-                        model_name=model_name,
-                        use_cache=True)
-
-    model = loader.get_model()
-    tokenizer = loader.get_tokenizer()
-
-    cache_dir = os.path.join(state_dict, model_name)
-
-    model.eval()
-    model.half()
-    model.cuda(device=device)
-
-    predictor = Predictor(model, tokenizer)
-
     uvicorn.run(app, host='0.0.0.0', port=7000, workers=1)
